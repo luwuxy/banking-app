@@ -37,7 +37,7 @@ function dashboard(req, res) {
             return res.send("Unable to load transactions.");
           }
 
-          res.render("customer-dashboard", {
+          res.json({
             account,
             transactions,
             success: req.query.success,
@@ -114,7 +114,7 @@ function withdraw(req, res) {
   })
 }
 
-export {
+export default {
   dashboard,
   deposit,
   withdraw

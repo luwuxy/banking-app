@@ -10,7 +10,7 @@ const app = express();
 const PORT = 8080;
 
 const corsOptions = {
-  origin: ["http://localhost:5173"]
+  origin: ["https://scaling-system-rwvg9vjrp54f465-5173.app.github.dev"]
 }
 
 app.use(cors(corsOptions));

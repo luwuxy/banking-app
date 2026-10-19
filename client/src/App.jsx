@@ -1,32 +1,25 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css'
+import AdminDashboard from './AdminDashboard.jsx'
 
 function App() {
-  const [array, setArray] = useState([]);
+  const [data, setData] = useState(null);
 
   const fetchData = async () => {
-    const response = await axios.get("http://localhost:8080/api");
-    setArray(response.data.blogPost);
+    const response = await axios.get("https://scaling-system-rwvg9vjrp54f465-8080.app.github.dev/testdata");
+    setData(response.data);
   }
 
   useEffect(() => {
     fetchData();
   }, [])
 
+  if (data) console.log(data);
+
   return (
     <>
-      <h1>Backend with Express & Node</h1>
-      <ul>
-        {
-          array.map((blog, index) => (
-            <li key={index}>
-              <h3>{blog.title}</h3>
-              <p>{blog.content}</p>
-            </li>
-          ))
-        }
-      </ul>
+      <AdminDashboard />
     </>
   )
 }

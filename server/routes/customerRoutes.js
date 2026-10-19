@@ -1,6 +1,6 @@
 import express from 'express';
 import customerController from '../controllers/customerController.js';
-import { requireCustomer } from '../middleware/auth';
+import { requireCustomer } from '../middleware/auth.js';
 import router from './adminRoutes.js';
 
 router.get("/", requireCustomer, customerController.dashboard);

@@ -1,7 +1,14 @@
-import db from "../config/database";
+import db from "../config/database.js";
+
+function testData(req, res) {
+  res.json({
+    data1: "value1",
+    data2: "value2"
+  })
+}
 
 function showLogin(req, res) {
-  res.render("login", {
+  res.json({
     error: null
   });
 }
@@ -21,13 +28,13 @@ function login(req, res) {
 
       if (err) {
         console.error(err);
-        return res.render("login", {
+        return res.json({
           error: "Database error."
         });
       }
 
       if (results.length === 0) {
-        return res.render("login", {
+        return res.json({
           error: "Invalid username or password."
         });
       }
@@ -49,7 +56,8 @@ function logout(req, res) {
   });
 }
 
-export {
+export default {
+  testData,
   showLogin,
   login,
   logout

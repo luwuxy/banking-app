@@ -9,14 +9,14 @@ function dashboard(req, res) {
       return res.send("Database error.");
     }
 
-    res.render("admin-dashboard", {
+    res.json({
       customers,
     })
   })
 }
 
 function showCreateCustomer(req, res) {
-  res.render("create-customer", {
+  res.json({
     error: null,
   })
 }
@@ -43,7 +43,7 @@ function createCustomer(req, res) {
     if (err) {
       console.error(err);
 
-      return res.render("create-customer", {
+      return res.json({
         error: "Unable to create login account.",
       })
     }
@@ -62,7 +62,7 @@ function createCustomer(req, res) {
         if (err) {
           console.error(err);
 
-          return res.render("create-customer", {
+          return res.json({
             error: "Unable to create customer.",
           })
         }
@@ -82,7 +82,7 @@ function createCustomer(req, res) {
             if (err) {
               console.error(err);
 
-              return res.render("create-customer", {
+              return res.json({
                 error: "Unable to create bank account.",
               })
             }
@@ -95,7 +95,7 @@ function createCustomer(req, res) {
   })
 }
 
-export {
+export default {
   dashboard,
   showCreateCustomer,
   createCustomer,
