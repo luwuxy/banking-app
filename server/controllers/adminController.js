@@ -52,13 +52,14 @@ function createCustomer(req, res) {
 
     const customerSQL = `
       INSERT INTO customers
-      (user_id, first_name, last_name)
+      (user_id, first_name, last_name, email, phone, address)
+      VALUES (?, ?, ?, ?, ?, ?)
     `;
 
     db.query(
       customerSQL,
       [userId, first_name, last_name, email, phone, address],
-      (err, customerResults) => {
+      (err, customerResult) => {
         if (err) {
           console.error(err);
 
@@ -87,7 +88,9 @@ function createCustomer(req, res) {
               })
             }
 
-            res.redirect("/admin");
+            return res.json({
+              success: "Customer created successfully."
+            });
           }
         )
       }

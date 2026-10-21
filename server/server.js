@@ -10,7 +10,8 @@ const app = express();
 const PORT = 8080;
 
 const corsOptions = {
-  origin: ["https://scaling-system-rwvg9vjrp54f465-5173.app.github.dev"]
+  origin: ["http://localhost:5173"],
+  credentials: true
 }
 
 app.use(cors(corsOptions));
@@ -20,6 +21,9 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }))
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/", authRoutes);
 app.use("/admin", adminRoutes);

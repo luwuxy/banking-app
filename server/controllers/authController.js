@@ -1,12 +1,5 @@
 import db from "../config/database.js";
 
-function testData(req, res) {
-  res.json({
-    data1: "value1",
-    data2: "value2"
-  })
-}
-
 function showLogin(req, res) {
   res.json({
     error: null
@@ -41,23 +34,20 @@ function login(req, res) {
 
       req.session.user = results[0];
 
-      if (results[0].role === "admin") {
-        return res.redirect("/admin");
-      }
-
-      return res.redirect("/customer");
+      return res.json({
+        role: results[0].role
+      });
     }
   );
 }
 
 function logout(req, res) {
   req.session.destroy(() => {
-    res.redirect("/");
+    res.redirect("http://localhost:5173/");
   });
 }
 
 export default {
-  testData,
   showLogin,
   login,
   logout

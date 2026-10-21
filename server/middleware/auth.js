@@ -15,8 +15,19 @@ function requireAdmin(req, res, next) {
 }
 
 function requireCustomer(req, res, next) {
-    if (!req.session.user || req.session.user.role !== "customer") {
-        return res.status(403).send("Access denied.");
+    console.log("Session:", req.session);
+    console.log("User:", req.session.user);
+
+    if (!req.session.user) {
+        return res.status(401).json({
+            error: "Not logged in. Session is missing."
+        });
+    }
+
+    if (req.session.user.role !== "customer") {
+        return res.status(403).json({
+            error: `Wrong role: ${req.session.user.role}`
+        });
     }
 
     next();
