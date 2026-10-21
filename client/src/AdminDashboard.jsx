@@ -62,8 +62,7 @@ export default function AdminDashboard() {
                       </td>
                       <td>
                         <strong>
-                          {customer.first_name}
-                          {customer.last_name}
+                          {customer.first_name} {customer.last_name}
                         </strong>
                       </td>
                       <td>

@@ -20,6 +20,11 @@ function Login() {
         { withCredentials: true }
       );
 
+      if (response.data.error) {
+        setError(response.data.error);
+        return;
+      }
+
       if (response.data.role === "admin") {
         navigate("/admin");
       } else {

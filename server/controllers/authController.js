@@ -12,7 +12,7 @@ function login(req, res) {
   const sql = `
         SELECT user_id, username, role FROM users
         WHERE username = ? AND password = ?
-    `;
+      `;
 
   db.query(
     sql,
@@ -27,6 +27,8 @@ function login(req, res) {
       }
 
       if (results.length === 0) {
+        console.log(results);
+
         return res.json({
           error: "Invalid username or password."
         });

@@ -1,6 +1,6 @@
 function requireLogin(req, res, next) {
     if (!req.session.user) {
-        return res.redirect("/");
+        return res.redirect("http://localhost:5173/");
     }
     
     next();
