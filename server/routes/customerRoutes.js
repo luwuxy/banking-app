@@ -10,4 +10,6 @@ router.post("/deposit", requireCustomer, customerController.deposit);
 
 router.post("/withdraw", requireCustomer, customerController.withdraw);
 
+router.post("/transfer", requireCustomer, customerController.transfer);
+
 export default router;

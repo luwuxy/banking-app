@@ -121,6 +121,11 @@ body {
     box-shadow: 0 5px 18px rgba(0,0,0,0.05);
 }
 
+.balance-card {
+    display: flex;
+    justify-content: space-between;
+}
+
 .card {
     margin-bottom: 25px;
 }
@@ -276,6 +281,22 @@ textarea:focus {
     background: #b91c1c;
 }
 
+.transfer {
+    appearance: none;
+    border: none;
+    border-radius: 10px;
+    background-color: white;
+    padding: 10px 15px;
+    font-size: 16px;
+
+    align-self: flex-start;
+}
+
+.transfer:hover {
+    background-color: rgb(211, 211, 211);
+    cursor: pointer;
+}
+
 
 /* =========================
    ALERTS
@@ -353,6 +374,33 @@ th {
     text-align: center;
     color: #6b7280;
     padding: 30px;
+}
+
+.choose-account {
+    display: flex;
+    gap: 15px;
+}
+
+.choose-account > button {
+    background-color: rgb(230, 230, 230);
+}
+
+.choose-account > button {
+    cursor: default
+}
+
+.choose-account > button:not(:disabled):hover {
+    background-color: rgb(207, 207, 207);
+    cursor: pointer;
+}
+
+.create-account {
+    color: rgb(92, 92, 92);
+    text-decoration: none;
+}
+
+.create-account:hover {
+    text-decoration: underline;
 }
 
 

@@ -46,6 +46,8 @@ function Login() {
         <h1>Online Banking</h1>
         <p className="subtitle">Secure Banking Portal</p>
 
+        <h3>Login</h3>
+
         {error && (
           <div className="alert error">
             {error}
@@ -78,7 +80,7 @@ function Login() {
           </button>
         </form>
 
-        <p className="login-note">Authorized users only</p>
+        <p className="login-note"><a className="create-account" href="/register">Create new account</a></p>
       </div>
     </div>
   );

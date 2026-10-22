@@ -6,11 +6,16 @@ import AdminDashboard from './AdminDashboard.jsx'
 import CreateCustomer from './CreateCustomer.jsx';
 import CustomerDashboard from './CustomerDashboard.jsx';
 import Login from './Login.jsx';
+import Register from './Register.jsx';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Login />
+  },
+  {
+    path: "/register",
+    element: <Register />
   },
   {
     path: "/admin",

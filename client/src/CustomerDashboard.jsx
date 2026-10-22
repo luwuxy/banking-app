@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router";
 import axios from "axios";
+import TransferView from "./components/TransferView";
 
 export default function CustomerDashboard() {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [viewTransfer, setViewTransfer] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState(0);
 
   async function fetchData() {
     const response = await axios.get(
@@ -58,6 +60,14 @@ export default function CustomerDashboard() {
     }
   }
 
+  function onViewTransfer() {
+    setViewTransfer(true);
+  }
+
+  function onCloseTransfer() {
+    setViewTransfer(false);
+  }
+
   if (!data) {
     return (
       <main className="container">
@@ -72,6 +82,15 @@ export default function CustomerDashboard() {
 
   return (
     <>
+      {viewTransfer && <TransferView
+      onCloseTransfer={onCloseTransfer}
+      handleTransaction={handleTransaction}
+      data={data}
+      error={error}
+      success={success}
+      selectedAccount={selectedAccount}
+      />}
+
       <header className="topbar">
         <div>
           <h2>Online Banking</h2>
@@ -83,8 +102,12 @@ export default function CustomerDashboard() {
       <main className="container">
         <div className="page-header">
           <div>
-            <h1>Welcome, {data.account.first_name}</h1>
+            <h1>Welcome, {data.accounts[selectedAccount].first_name}</h1>
             <p>Manage your bank account.</p>
+          </div>
+          <div className="choose-account">
+            <button className="btn" disabled={!data.accounts.some(account => account.account_type === "Savings")} onClick={() => setSelectedAccount(0)}>Savings</button>
+            <button className="btn" disabled={!data.accounts.some(account => account.account_type === "Checking")} onClick={() => setSelectedAccount(1)}>Checking</button>
           </div>
         </div>
 
@@ -102,33 +125,36 @@ export default function CustomerDashboard() {
 
         <section className="account-summary">
           <div className="balance-card">
-            <span>Available Balance</span>
-            <h1>
-              ₱{Number(data.account.balance).toLocaleString("en-PH", {
-                minimumFractionDigits: 2
-              })}
-            </h1>
+            <div className="left-side">
+              <span>Available Balance</span>
+              <h1>
+                ₱{Number(data.accounts[selectedAccount].balance).toLocaleString("en-PH", {
+                  minimumFractionDigits: 2
+                })}
+              </h1>
 
-            <p>
-              Account:{" "}
-              <strong>{data.account.account_number}</strong>
-            </p>
+              <p>
+                Account:{" "}
+                <strong>{data.accounts[selectedAccount].account_number}</strong>
+              </p>
+            </div>
+            <button className="transfer" onClick={onViewTransfer}>Transfer Money</button>
           </div>
 
           <div className="info-card">
             <span>Account Holder</span>
             <h3>
-              {data.account.first_name}{" "}
-              {data.account.last_name}
+              {data.accounts[selectedAccount].first_name}{" "}
+              {data.accounts[selectedAccount].last_name}
             </h3>
-            <p>{data.account.email}</p>
+            <p>{data.accounts[selectedAccount].email}</p>
           </div>
 
           <div className="info-card">
             <span>Account Type</span>
-            <h3>{data.account.account_type}</h3>
+            <h3>{data.accounts[selectedAccount].account_type}</h3>
             <p>
-              Status: <strong>{data.account.status}</strong>
+              Status: <strong>{data.accounts[selectedAccount].status}</strong>
             </p>
           </div>
         </section>
@@ -148,7 +174,7 @@ export default function CustomerDashboard() {
               <input
                 type="hidden"
                 name="account_number"
-                value={data.account.account_number}
+                value={data.accounts[selectedAccount].account_number}
                 readOnly
               />
 
@@ -185,7 +211,7 @@ export default function CustomerDashboard() {
               <input
                 type="hidden"
                 name="account_number"
-                value={data.account.account_number}
+                value={data.accounts[selectedAccount].account_number}
                 readOnly
               />
 

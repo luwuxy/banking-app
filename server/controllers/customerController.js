@@ -3,50 +3,49 @@ import db from '../config/database.js';
 function dashboard(req, res) {
   const userId = req.session.user.user_id;
 
-  const accountSQL = `SELECT * FROM vw_customer_accounts WHERE user_id = ?`;
+  const accountSQL = `
+    SELECT * FROM vw_customer_accounts
+    WHERE user_id = ?
+  `;
 
-  db.query(
-    accountSQL,
-    [userId],
-    (err, accounts) => {
+  db.query(accountSQL, [userId], (err, accounts) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Database error." });
+    }
+
+    if (accounts.length === 0) {
+      return res.status(404).json({
+        error: "No bank account found."
+      });
+    }
+
+    const transactionSQL = `
+      SELECT * FROM vw_transaction_history
+      WHERE account_number IN (?)
+      ORDER BY transaction_date DESC
+    `;
+
+    const accountNumbers = accounts.map(
+      (account) => account.account_number
+    );
+
+    db.query(transactionSQL, [accountNumbers], (err, transactions) => {
       if (err) {
         console.error(err);
-        return res.send("Database error.");
-      }
-      
-      if (accounts.length === 0) {
-        return res.send(
-          "No bank account found."
-        );
+        return res.status(500).json({
+          error: "Unable to load transactions."
+        });
       }
 
-      const account = accounts[0];
-
-      const transactionSQL = `
-        SELECT * FROM vw_transaction_history
-        WHERE account_number = ?
-        ORDER BY transaction_date DESC
-      `;
-
-      db.query(
-        transactionSQL,
-        [account.account_number],
-        (err, transactions) => {
-          if (err) {
-            console.error(err);
-            return res.send("Unable to load transactions.");
-          }
-
-          res.json({
-            account,
-            transactions,
-            success: req.query.success,
-            error: req.query.error
-          })
-        }
-      )
-    }
-  )
+      res.json({
+        accounts,
+        transactions,
+        success: req.query.success,
+        error: req.query.error
+      });
+    });
+  });
 }
 
 function deposit(req, res) {
@@ -114,8 +113,62 @@ function withdraw(req, res) {
   })
 }
 
+function transfer(req, res) {
+  const { account_number_sender, account_number_recipient, amount, purpose } = req.body;
+  const transferAmount = parseFloat(amount);
+
+  if (isNaN(transferAmount) || transferAmount <= 0) {
+    return res.redirect("/customer?error=Invalid transfer amount");
+  }
+
+  const checkSQL = `
+    SELECT account_number
+    FROM accounts
+    WHERE account_number = ?
+  `;
+
+  db.query(checkSQL, [
+    account_number_recipient
+  ], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.redirect("/customer?error=Database error");
+    }
+
+    if (results.length === 0) {
+      return res.redirect(
+        "/customer?error=" +
+        encodeURIComponent("Recipient account does not exist.")
+      );
+    }
+
+    const sql = 'CALL sp_transfer(?, ?, ?, ?)';
+
+    db.query(sql, [
+      account_number_sender,
+      account_number_recipient,
+      amount,
+      purpose
+    ], (err) => {
+      if (err) {
+        console.error(err);
+        return res.redirect(
+          "/customer?error=" +
+          encodeURIComponent(err.sqlMessage || "Transfer failed")
+        );
+      }
+
+      res.redirect(
+        "/customer?success=" +
+        encodeURIComponent("Transfer completed successfully.")
+      );
+    })
+  })
+}
+
 export default {
   dashboard,
   deposit,
-  withdraw
+  withdraw,
+  transfer
 };
