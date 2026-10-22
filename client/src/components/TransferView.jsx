@@ -43,7 +43,7 @@ export default function TransferView({ onCloseTransfer, handleTransaction, data,
           <input type="text" name="purpose" id="purpose" className="modal-input" />
           <button type="submit" className="btn primary">Send Money</button>
           {(success || data.success) && (
-            <div className="alert success">
+            <div className="alert success" id="transfer-alert">
               {success || data.success}
             </div>
           )}

@@ -66,6 +66,8 @@ export default function CustomerDashboard() {
 
   function onCloseTransfer() {
     setViewTransfer(false);
+    setError("");
+    setSuccess("");
   }
 
   if (!data) {

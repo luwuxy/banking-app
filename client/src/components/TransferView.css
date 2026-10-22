@@ -46,3 +46,8 @@
 .close-modal:hover {
   cursor: pointer;
 }
+
+#transfer-alert {
+  margin-top: 20px;
+  margin-bottom: 0;
+}
